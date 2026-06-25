@@ -627,13 +627,13 @@ let fbApp = null, fbAuth = null, fbDb = null, fbStorage = null, fbUser = null;
 
 async function loadFirebaseConfig(){
   try{
-    const res = await window.storage.get('scc-firebase-config', false);
-    if(res && res.value) return JSON.parse(res.value);
-  }catch(e){ /* not configured yet */ }
+    const raw = localStorage.getItem('scc-firebase-config');
+    if(raw) return JSON.parse(raw);
+  }catch(e){ /* not configured yet, or storage blocked by browser settings */ }
   return null;
 }
 async function saveFirebaseConfig(cfg){
-  await window.storage.set('scc-firebase-config', JSON.stringify(cfg), false);
+  localStorage.setItem('scc-firebase-config', JSON.stringify(cfg));
 }
 function initFirebase(cfg){
   fbApp = firebase.initializeApp(cfg);
